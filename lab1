@@ -1,0 +1,102 @@
+#include <iostream>
+#include <iomanip>
+
+using namespace std;
+
+int main()
+{
+    double a, b, c;
+    double Xnach, Xkon, dX;
+
+    cout << "Введите a: ";
+    cin >> a;
+
+    cout << "Введите b: ";
+    cin >> b;
+
+    cout << "Введите c: ";
+    cin >> c;
+
+    cout << "Введите Xnach: ";
+    cin >> Xnach;
+
+    cout << "Введите Xkon: ";
+    cin >> Xkon;
+
+    cout << "Введите dX: ";
+    cin >> dX;
+
+    // Проверка шага
+    if (dX <= 0)
+    {
+        cout << "Ошибка: dX должен быть больше 0!" << endl;
+        return 1;
+    }
+
+    // Целые части a, b, c
+    int Ac = (int)a;
+    int Bc = (int)b;
+    int Cc = (int)c;
+
+    // (Ac ИЛИ Bc) И (Ac ИЛИ Cc) != 0
+    bool realValue = ((Ac | Bc) & (Ac | Cc)) != 0;
+
+    cout << endl;
+    cout << "--------------------------------" << endl;
+    cout << setw(12) << "x" << setw(15) << "F(x)" << endl;
+    cout << "--------------------------------" << endl;
+
+    for (double x = Xnach; x <= Xkon + 0.000001; x += dX)
+    {
+        double F;
+
+        // 1) ax^2 + b при x < 0 и b = 0
+        if (x < 0 && b == 0)
+        {
+            F = a * x * x + b;
+        }
+
+        // 2) (x - a) / (x - c) при x > 0 и b = 0
+        else if (x > 0 && b == 0)
+        {
+            if (x == c)
+            {
+                cout << setw(12) << x
+                     << setw(15) << "Ошибка" << endl;
+                continue;
+            }
+
+            F = (x - a) / (x - c);
+        }
+
+        // 3) x / c в остальных случаях
+        else
+        {
+            if (c == 0)
+            {
+                cout << setw(12) << x
+                     << setw(15) << "Ошибка" << endl;
+                continue;
+            }
+
+            F = x / c;
+        }
+
+        cout << fixed << setprecision(3);
+        cout << setw(12) << x;
+
+        // Вещественное или целое значение
+        if (realValue)
+        {
+            cout << setw(15) << F;
+        }
+        else
+        {
+            cout << setw(15) << (int)F;
+        }
+
+        cout << endl;
+    }
+
+    return 0;
+}
